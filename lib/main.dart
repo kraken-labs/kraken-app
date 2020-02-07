@@ -1,6 +1,31 @@
 import 'package:flutter/material.dart';
 
+import 'dart:async';
+
+import 'package:grpc/grpc.dart';
+
+import 'package:kraken_app/grpc/helloworld.pb.dart';
+import 'package:kraken_app/grpc/helloworld.pbgrpc.dart';
+
 void main() => runApp(MyApp());
+
+Future<void> execGrpc() async {
+  final channel = ClientChannel('192.168.0.147',
+      port: 50051,
+      options:
+          const ChannelOptions(credentials: ChannelCredentials.insecure()));
+  final stub = GreeterClient(channel);
+
+  final name = 'Fercho'; // args.isNotEmpty ? args[0] : 'world';
+
+  try {
+    final response = await stub.sayHello(HelloRequest()..name = name);
+    print('Greeter client received: ${response.message}');
+  } catch (e) {
+    print('Caught error: $e');
+  }
+  await channel.shutdown();
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -54,6 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+
+      execGrpc();
     });
   }
 

@@ -4,6 +4,10 @@ A new Flutter project.
 
 ## Getting Started
 
+asdf plugin-add dart
+asdf install dart 2.7.1
+flutter pub global activate protoc_plugin
+
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
